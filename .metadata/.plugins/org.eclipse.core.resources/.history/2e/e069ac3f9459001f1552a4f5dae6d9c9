@@ -1,0 +1,42 @@
+package com.sgnn7.server;
+
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class HttpServer implements IServer {
+	protected String serverName;
+	protected int listenerPort;
+
+	public static void main(String args[]) {
+		HttpServer server = new HttpServer("SimpleHttpServer", 80);
+		server.start();
+	}
+
+	public HttpServer(String name, int port) {
+		this.serverName = name;
+		this.listenerPort = port;
+	}
+
+	public void start() {
+		try {
+			ServerSocket serverSocket = getServerSocket();
+
+			System.out.println(serverName);
+			System.out.println("Port: " + listenerPort);
+			
+			while(true) {
+				Socket socketConnection = serverSocket.accept();
+				(new HttpRunner(socketConnection)).start();
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Error! Could not open port " + listenerPort);
+			e.printStackTrace();
+			System.exit(-1);
+		}
+	}
+
+	protected ServerSocket getServerSocket() throws Exception {
+		return new ServerSocket(listenerPort);
+	}
+}

@@ -1,0 +1,43 @@
+!SESSION 2010-05-06 20:15:29.739 -----------------------------------------------
+eclipse.buildId=
+java.version=1.6.0_18
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86 -product org.eclipse.epp.package.jee.product
+
+!ENTRY org.eclipse.ui 4 4 2010-05-06 20:16:16.583
+!MESSAGE Part already exists in page layout: org.eclipse.ui.views.PropertySheet.
+
+!ENTRY org.eclipse.jdt.core 4 4 2010-05-06 23:49:29.716
+!MESSAGE JavaBuilder handling ImageBuilderInternalException while building: HttpServer
+!STACK 1
+Java Model Exception: Java Model Status [HttpRunner [in [Working copy] HttpServer.java [in com.sgnn7.server [in src [in HttpServer]]]] does not exist]
+	at org.eclipse.jdt.internal.core.JavaElement.newNotPresentException(JavaElement.java:492)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:526)
+	at org.eclipse.jdt.internal.core.JavaElement.getElementInfo(JavaElement.java:252)
+	at org.eclipse.jdt.internal.core.JavaElement.getElementInfo(JavaElement.java:238)
+	at org.eclipse.jdt.internal.core.Member.getNameRange(Member.java:316)
+	at org.eclipse.jdt.internal.core.builder.AbstractImageBuilder.createProblemFor(AbstractImageBuilder.java:397)
+	at org.eclipse.jdt.internal.core.builder.AbstractImageBuilder.acceptResult(AbstractImageBuilder.java:179)
+	at org.eclipse.jdt.internal.compiler.Compiler.compile(Compiler.java:504)
+	at org.eclipse.jdt.internal.core.builder.AbstractImageBuilder.compile(AbstractImageBuilder.java:364)
+	at org.eclipse.jdt.internal.core.builder.IncrementalImageBuilder.compile(IncrementalImageBuilder.java:321)
+	at org.eclipse.jdt.internal.core.builder.AbstractImageBuilder.compile(AbstractImageBuilder.java:301)
+	at org.eclipse.jdt.internal.core.builder.IncrementalImageBuilder.build(IncrementalImageBuilder.java:134)
+	at org.eclipse.jdt.internal.core.builder.JavaBuilder.buildDeltas(JavaBuilder.java:265)
+	at org.eclipse.jdt.internal.core.builder.JavaBuilder.build(JavaBuilder.java:193)
+	at org.eclipse.core.internal.events.BuildManager$2.run(BuildManager.java:627)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:170)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:201)
+	at org.eclipse.core.internal.events.BuildManager$1.run(BuildManager.java:253)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:256)
+	at org.eclipse.core.internal.events.BuildManager.basicBuildLoop(BuildManager.java:309)
+	at org.eclipse.core.internal.events.BuildManager.build(BuildManager.java:341)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:140)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:238)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+!SUBENTRY 1 org.eclipse.jdt.core 4 969 2010-05-06 23:49:29.717
+!MESSAGE HttpRunner [in [Working copy] HttpServer.java [in com.sgnn7.server [in src [in HttpServer]]]] does not exist

@@ -1,0 +1,3 @@
+INDEX VERSION 1.126+D:\da documents\development\asyn_research\.metadata\.plugins\org.eclipse.jdt.core
+292558240.index
+2354693123.index

@@ -1,0 +1,51 @@
+package com.sgnn7.server;
+
+import java.util.Vector;
+
+class HTTPRequest {
+	Vector<String> lines = new Vector<String>();
+
+	public HTTPRequest() {
+	}
+
+	public void addLine(String line) {
+		lines.addElement(line);
+	}
+
+	boolean isGetRequest() {
+		if (lines.size() > 0) {
+			String firstLine = (String) lines.elementAt(0);
+			if (firstLine.length() > 0)
+				if (firstLine.substring(0, 3).equalsIgnoreCase("GET"))
+					return true;
+		}
+		return false;
+	}
+
+	String getFileName() {
+		if (lines.size() > 0) {
+			String firstLine = (String) lines.elementAt(0);
+			String fileName = firstLine.substring(firstLine.indexOf(" ") + 1);
+			int n = fileName.indexOf(" ");
+			if (n != -1)
+				fileName = fileName.substring(0, n);
+			try {
+				if (fileName.charAt(0) == '/')
+					fileName = fileName.substring(1);
+			} catch (StringIndexOutOfBoundsException ex) {
+			}
+			if (fileName.equals(""))
+				fileName = "index.htm";
+			if (fileName.charAt(fileName.length() - 1) == '/')
+				fileName += "index.htm";
+			return fileName;
+		} else
+			return "";
+	}
+
+	protected void log() {
+		System.out.println("Received the following request:");
+		for (int i = 0; i < lines.size(); ++i)
+			System.out.println((String) lines.elementAt(i));
+	}
+}

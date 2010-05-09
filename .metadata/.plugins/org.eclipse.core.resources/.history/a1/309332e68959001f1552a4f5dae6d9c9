@@ -1,0 +1,30 @@
+package com.sgnn7.client;
+
+import java.io.File;
+
+import javax.net.ssl.SSLSocketFactory;
+
+public class HttpClient {
+	private SSLSocketFactory getFactory( File pKeyFile, String pKeyPassword )  {
+		  KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509);
+		  KeyStore keyStore = KeyStore.getInstance("PKCS12");
+
+		  InputStream keyInput = new FileInputStream(pKeyFile);
+		  keyStore.load(keyInput, pKeyPassword.toCharArray());
+		  keyInput.close();
+
+		  keyManagerFactory.init(keyStore, pKeyPassword.toCharArray());
+
+		  SSLContext context = SSLContext.getInstance("TLS");
+		  context.init(keyManagerFactory.getKeyManagers(), null, new SecureRandom());
+
+		  return context.getSocketFactory();
+		}
+
+	public static void main(String args[]) {
+		URL url = new URL("https://someurl");
+		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+		con.setSSLSocketFactory(getFactory(new File("file.p12"), "secret"));
+	}
+
+}

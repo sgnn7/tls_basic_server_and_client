@@ -1,0 +1,24 @@
+package com.sgnn7.client;
+
+import javax.security.cert.X509Certificate;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLPeerUnverifiedException;
+import javax.net.ssl.SSLSession;
+
+class CustomHostnameVerifier implements HostnameVerifier {
+	public boolean verify(String hostName, SSLSession session) {
+		System.out.println("Host: " + hostName);
+		try {
+			X509Certificate[] chain = session.getPeerCertificateChain();
+			for( X509Certificate cert: chain){
+				
+				System.out.println("Certificate DN: " + cert.getSubjectDN());
+			}
+		} catch (SSLPeerUnverifiedException e) {
+			e.printStackTrace();
+		}
+
+		return true;
+	}
+}

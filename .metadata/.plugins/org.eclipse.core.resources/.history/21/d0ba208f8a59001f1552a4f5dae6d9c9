@@ -1,0 +1,72 @@
+package com.sgnn7.client;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
+
+public class HttpClient {
+	String clientKeystore = "client.keystore";
+	char[] keystorePassword = "changeit".toCharArray();
+	char[] keyPassword = "changeit".toCharArray();
+	
+	static String clientTruststore = "client.truststore";
+	static char[] truststorePassword = "changeit".toCharArray();
+	
+	private static SSLSocketFactory getFactory(File pKeyFile,
+			String pKeyPassword) throws Exception {
+		KeyStore trustStore = KeyStore.getInstance("JKS");
+		trustStore.load(new FileInputStream(clientTruststore), truststorePassword);
+		TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+		tmf.init(trustStore);
+
+		KeyManagerFactory keyManagerFactory = KeyManagerFactory
+				.getInstance("SunX509");
+		KeyStore keyStore = KeyStore.getInstance("JKS");
+
+		InputStream keyInput = new FileInputStream(pKeyFile);
+		keyStore.load(keyInput, pKeyPassword.toCharArray());
+		keyInput.close();
+
+		keyManagerFactory.init(keyStore, pKeyPassword.toCharArray());
+
+		SSLContext context = SSLContext.getInstance("TLSv1");
+		context.init(keyManagerFactory.getKeyManagers(), tmf.getTrustManagers(),
+				new SecureRandom());
+
+		return context.getSocketFactory();
+	}
+
+	public static void main(String args[]) {
+
+
+		try {			
+			URL url = new URL("https://someurl");
+			HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+			con.setSSLSocketFactory(getFactory(new File("file.p12"), "secret"));
+
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}

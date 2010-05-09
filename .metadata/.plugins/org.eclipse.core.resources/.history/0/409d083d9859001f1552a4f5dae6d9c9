@@ -1,0 +1,85 @@
+package com.sgnn7.server;
+
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.Socket;
+
+class HttpRunner extends Thread {
+	Socket clientSocket;
+
+	public HttpRunner(Socket clientSocket) {
+		this.clientSocket = clientSocket;
+	}
+
+	public void run() {
+		try {
+			debugConnectionInfo(clientSocket);
+
+			BufferedOutputStream outputStream = new BufferedOutputStream(clientSocket
+					.getOutputStream());
+			ServerInputStreamReader inputStream = new ServerInputStreamReader(clientSocket
+					.getInputStream());
+
+			RequestParser request = inputStream.getRequest();
+			request.debugRequest();
+
+			if (request.isGetRequest())
+				fetchFile(request, outputStream);
+			
+			System.out.println("Client " + clientSocket.getRemoteSocketAddress()+ ":" + clientSocket.getPort() + " done");
+			
+			clientSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	void debugConnectionInfo(Socket client) {
+		String remoteHost = client.getInetAddress().getHostName();
+		String destAddr = client.getInetAddress().getHostAddress();
+		int destPort = client.getPort();
+		System.out.println("Accepted connection to " + remoteHost + " ("
+				+ destAddr + ")" + " on port " + destPort + ".");
+	}
+
+	void fetchFile(RequestParser request, BufferedOutputStream outStream)
+			throws IOException {
+		String fileName = request.getFileName();
+		File file = new File("site" + File.separator + fileName);
+		// Give them the requested file
+		if (file.exists())
+			sendFile(outStream, file);
+		else
+			System.out.println("File " + file.getCanonicalPath()
+					+ " does not exist.");
+	}
+
+	void sendFile(BufferedOutputStream out, File file) {
+		try {
+			DataInputStream in = new DataInputStream(new FileInputStream(file));
+			int len = (int) file.length();
+			byte buffer[] = new byte[len];
+			in.readFully(buffer);
+			in.close();
+			out.write("HTTP/1.0 200 OK\r\n".getBytes());
+			out.write(("Content-Length: " + buffer.length + "\r\n").getBytes());
+			out.write("Content-Type: text/html\r\n\r\n".getBytes());
+			out.write(buffer);
+			out.flush();
+			out.close();
+			System.out.println("File sent: " + file.getCanonicalPath());
+			System.out.println("Number of bytes: " + len);
+		} catch (Exception ex) {
+			try {
+				out.write(("HTTP/1.0 400 " + "No can do" + "\r\n").getBytes());
+				out.write("Content-Type: text/html\r\n\r\n".getBytes());
+			} catch (IOException ioe) {
+			}
+			System.out.println("Error retrieving " + file);
+		}
+	}
+
+}

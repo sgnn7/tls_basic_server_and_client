@@ -1,0 +1,101 @@
+﻿{
+border: 0;
+padding: 0;
+margin: 0;
+}
+
+
+html
+{
+	height:100%;
+}
+
+body 
+
+{
+	height:100%;
+	background-color: #90C060;
+
+}
+
+A:hover
+
+{
+
+	color:#666633;
+
+	text-decoration:none;
+
+}
+
+
+
+A:visited
+
+{
+
+	color: Black;
+
+	text-decoration:none;
+
+}
+
+A:link
+
+{
+
+	color: #000000;
+
+	text-decoration:none;
+
+}
+
+
+
+A
+
+{
+
+	color:Black;
+
+	text-decoration:none;
+
+}
+
+
+
+P
+
+{
+	color:Black;
+	text-decoration:none;
+	margin-left: 170px;
+	margin-right: 170px;
+
+}
+
+#PageDiv #DivLeftNav #DivNavBar {
+	font-size: medium;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: capitalize;
+	text-align: center;
+	position: absolute;
+	left: 0px;
+	top: 50px;
+	z-index: 3;
+	width: 99px;
+	color: #EBE9ED;
+}
+.Regularlink {
+	font-size: medium;
+	color: #000000;
+	font-weight: bold;
+}
+.Graylink {
+	font-size: medium;
+	color: #999999;
+	font-weight: bold;
+}

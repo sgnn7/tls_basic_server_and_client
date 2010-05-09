@@ -1,0 +1,28 @@
+package com.sgnn7.client;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLPeerUnverifiedException;
+import javax.net.ssl.SSLSession;
+
+	class NullHostnameVerifier implements HostnameVerifier {
+	    public boolean verify(String hostName, SSLSession session) {
+	    	System.out.println("Testing: " + hostName);
+	    	try {
+				System.out.println(session.getPeerCertificateChain().toString());
+			} catch (SSLPeerUnverifiedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	return true;
+//	        if (isIpAddress(hostName)) {
+//	            matchIP(hostName, x509certificate);
+//	        } else {
+//	            matchDNS(hostName, x509certificate);
+//	        }
+	    }
+
+		private boolean isIpAddress(String hostName) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+	}

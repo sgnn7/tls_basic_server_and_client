@@ -1,0 +1,73 @@
+package com.sgnn7.tools;
+
+import java.security.cert.*;
+import java.security.*;
+import java.security.interfaces.RSAPrivateKey;
+import java.io.*;
+
+public class ExportAsPKCS12 {
+	static String storeName = "client";
+	static String keystoreFullName = storeName + ".keystore";
+	static char[] storePassword = "changeit".toCharArray();
+
+	static String pkcs12Store = storeName + "keys.p12";
+	static char[] pkcs12Password = "changeit".toCharArray();
+
+	static RSAPrivateKey privateKey = null;
+	static X509Certificate[] certificateChain = null;
+
+	static public void main(String[] args) {
+		try {
+			exportFromJKS();
+			importIntoPKCS12();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			System.err.println("Program exiting");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	static void exportFromJKS() throws Exception {
+		// Load the JKS key store.
+		KeyStore ks = KeyStore.getInstance("JKS");
+		FileInputStream fis = new FileInputStream(keystoreFullName);
+		ks.load(fis, storePassword);
+		fis.close();
+
+		// Get first available key entry from the JKS file.
+		String alias;
+		for (java.util.Enumeration e = ks.aliases(); e.hasMoreElements();) {
+			alias = (String) e.nextElement();
+			if (ks.isKeyEntry(alias)) {
+				privateKey = (RSAPrivateKey) ks.getKey(alias, storePassword);
+				java.security.cert.Certificate[] chain = ks
+						.getCertificateChain(alias);
+				certificateChain = new X509Certificate[chain.length];
+
+				for (int i = 0; i < chain.length; i++)
+					certificateChain[i] = (X509Certificate) chain[i];
+				System.out.println("Exporting key entry with alias: " + alias);
+				break;
+			}
+		}
+		if (certificateChain == null)
+			throw new Exception("Error! No key entry found in JKS file:	" + keystoreFullName);
+	}
+
+	static void importIntoPKCS12() throws Exception {
+		// Create a PKCS#12 key store.
+		KeyStore ks = KeyStore.getInstance("pkcs12");
+		ks.load(null, null);
+
+		// Import/insert the exported key entry into PKCS#12 key store.
+		ks.setKeyEntry("", privateKey, pkcs12Password, certificateChain);
+
+		// Save key store on disk.
+		FileOutputStream fos = new FileOutputStream(pkcs12Store);
+		ks.store(fos, pkcs12Password);
+		fos.close();
+
+		System.out
+				.println("Import of key entry into PKCS#12 key store succeeded.");
+	}
+}

@@ -1,0 +1,52 @@
+package com.sgnn7.server;
+
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+class HTTPInputStream extends FilterInputStream {
+	public HTTPInputStream(InputStream in) {
+		super(in);
+	}
+
+	public String readLine() throws IOException {
+		StringBuffer result = new StringBuffer();
+		boolean isFinished = false;
+		boolean cr = false;
+		int readChar;
+		while(!isFinished){
+			readChar = read();
+			if (readChar == -1)
+				return result.toString();
+				
+			result.append((char) readChar);
+			
+			if (cr && readChar == '\n') {
+				result.setLength(result.length() - 2);
+				return result.toString();
+			}
+			if (readChar == '\r')
+				cr = true;
+			else
+				cr = false;
+		}
+		
+		return result.toString();
+	}
+
+	public RequestParser getRequest() throws IOException {
+		RequestParser request = new RequestParser();
+		
+		String headerLine;
+		
+		while(true){
+			headerLine = readLine();
+			if (headerLine == null || headerLine.length() == 0)
+				break;
+
+			request.addLine(headerLine);
+		};
+		
+		return request;
+	}
+}

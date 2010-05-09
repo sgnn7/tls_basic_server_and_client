@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head runat="server">
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" type="text/css" href="index_files/StyleSheet.css"
+ media="all">
+<style type="text/css">
+<!--
+.style1 {
+	font-size: xx-small;
+	font-style: italic;
+}
+.Smalltext {
+	font-size: xx-small;
+	font-weight: bold;
+}
+-->
+</style>
+    
+	<title>Sgnn7. Is life? No. Sgnn7</title>
+	<link rel="shortcut icon" href="http://sgnn7.org/icon.ico">	
+</head><body style="vertical-align: middle; background-color: rgb(147, 
+157, 232); text-align: center;" bgcolor="#e8ebe1">
+
+<div id="PageDiv" style="height: 100%; left: 0%; top: 0px; 
+vertical-align: middle; width: 100%; position: absolute;">
+    <div id="DivTop" style="background-position: left top; left: 0pt; 
+background-image: url(&quot;pics/top.png&quot;); width: 99%; 
+background-repeat: repeat-x; position: absolute; top: 0px; height: 
+100px; z-index: 0; overflow: auto;">    </div>
+    <div id="DivTopLeft" style="background-position: left top; left: 
+0px; background-image: url(&quot;pics/corner.png&quot;); width: 100px; 
+background-repeat: no-repeat; position: absolute; top: 0px; height: 
+100px; z-index: 1;">    </div>
+    
+    <div id="DivLeftNav" style="width: 100px; height: 1500px; 
+background-image: url(&quot;pics/left.png&quot;); background-repeat: 
+repeat-y; top: 100px; left: 0px; position: absolute; visibility: 
+visible; z-index: 1;">
+      <div id="DivNavBar">
+			  <div class="Graylink" align="center">Home</div>		
+			  <div align="center"><a href="http://sgnn7.org/videos.htm" 
+class="Regularlink">Videos</a></div>		
+  	          <div class="Regularlink" align="center"><a 
+href="http://sgnn7.org/gallery"><strong>Pics</strong></a></div>
+<!--			  <div align="center" class="Graylink">Videos</div>		-->
+  	          <div class="Regularlink" align="center"><a 
+href="http://sgnn7.org/blog"><strong>Blog</strong></a></div> 
+<!--  	          <div align="center" class="Graylink"><strong>Texts</strong></div>     -->
+  	          <div class="Regularlink" align="center"><a 
+href="http://sgnn7.org/forums"><strong>Forums</strong></a></div>
+  	          <div class="Regularlink" align="center"><a 
+href="http://sgnn7.org/projects.htm"><strong>Projects</strong></a></div>
+ 			  
+  	          <div class="Regularlink" align="center"><a 
+href="http://sgnn7.org/about.htm"><strong>About</strong></a></div>
+  	  </div>
+</div>
+    <div id="Main" style="width: 99%; height: 1500px; left: 0pt; 
+background-image: url(&quot;pics/middle.png&quot;); background-repeat: 
+repeat; position: absolute; top: 100px; z-index: 0;"> 
+
+	  <p>&nbsp;</p>
+	  <p><br>
+	    <object height="500" width="700"><param name="movie" 
+value="http://www.youtube.com/v/33nvfGlDB8I&amp;rel=0&amp;color1=0xd6d6d6&amp;color2=0xf0f0f0&amp;border=0"><param
+ name="wmode" value="transparent"><embed 
+src="index_files/33nvfGlDB8Irel0color10xd6d6d6color20xf0f0f0border0" 
+type="application/x-shockwave-flash" wmode="transparent" height="500" 
+width="700"></object>
+
+	    <br>
+
+            If the radiance of a thousand suns
+            <br>
+            Were to burst at once into the sky
+            <br>
+            That would be like the splendor of the Mighty one...
+            <br>
+            <a href="http://youtube.com/watch?v=tmP8Bgof6KE">I am become
+ Death</a>, The shatterer of Worlds.&nbsp;<br>
+            <br>
+            -Bhagavad-Gita<br>
+
+
+          <br>
+          <br>
+          <br>
+          <br>
+
+<object height="500" width="700"><param name="movie" 
+value="http://www.youtube.com/v/2FN4QxDe7k0&amp;rel=1"><param 
+name="wmode" value="transparent"><embed 
+src="index_files/2FN4QxDe7k0rel1" type="application/x-shockwave-flash" 
+wmode="transparent" height="500" width="700"></object>
+
+            <br>
+            <br>
+            <br>
+            <br>
+		<!--
+<script type="text/javascript">
+digg_id = 'digg-widget-container'; //make this id unique for each widget you put on a single page.
+digg_target = 1;
+digg_theme = 'digg-widget-theme6';
+digg_custom_header = '#cce';
+digg_custom_border = '#cec';
+digg_custom_link = '#003';
+digg_custom_hoverlink = '#00f';
+digg_custom_footer = '#fff';
+</script>
+<script type="text/javascript" src="http://digg.com/tools/widgetjs"></script>
+<script type="text/javascript" src="http://digg.com/tools/services?type=javascript&callback=diggwb&endPoint=/stories/popular&count=10"></script>
+-->			
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+	        <em><a href="http://sgnn7.org/fw.mp3">Under <span 
+class="style1">very slow</span>  Construction</a></em><br>
+      </p>
+  </div>    <div id="DivRight" style="height: 1500px; background-image: 
+url(&quot;pics/right.png&quot;); width: 100px; position: absolute; top: 
+100px; visibility: visible; z-index: 1; right: 0px;">
+    </div>
+
+    <div id="DivTopRight" style="background-image: 
+url(&quot;pics/corner_r.png&quot;); width: 100px; position: absolute; 
+top: 0px; height: 100px; visibility: visible; z-index: 2; right: 0px;"> 
+   </div>
+</div>
+
+</body></html>

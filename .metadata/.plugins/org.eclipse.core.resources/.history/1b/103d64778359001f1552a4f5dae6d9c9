@@ -1,0 +1,78 @@
+package com.sgnn7.tools;
+
+import java.security.cert.*;
+import java.security.*;
+import java.security.interfaces.RSAPrivateKey;
+import java.io.*;
+
+public class ExportAsPKCS12 {
+	static String JKS_FILENAME = "mykeystore.jks";
+	static char[] JKS_PASSWORD = "secret".toCharArray();
+
+	static String PKCS12_FILENAME = "mynewkeystore.p12";
+	static char[] PKCS12_PASSWORD = "secret".toCharArray();
+
+	static RSAPrivateKey PRIVATE_KEY = null;
+	static X509Certificate[] CERT_CHAIN = null;
+
+	static public void main(String[] args)
+	{
+	try {
+	exportFromJKS();
+	importIntoPKCS12();
+	} catch(Throwable t) {
+	t.printStackTrace();
+	System.err.println("Prog failed. Exiting...");
+	}
+	}
+
+	static void exportFromJKS()
+	throws Exception
+	{
+	//Load the JKS key store.
+	KeyStore ks = KeyStore.getInstance("JKS");
+	FileInputStream fis = new FileInputStream(JKS_FILENAME);
+	ks.load(fis, JKS_PASSWORD);
+	fis.close();
+
+	//Get first available key entry from the JKS file.
+	String alias;
+	for(java.util.Enumeration e = ks.aliases();
+	e.hasMoreElements(); )
+	{
+	alias = (String)e.nextElement();
+	if(ks.isKeyEntry(alias))
+	{
+	PRIVATE_KEY = (RSAPrivateKey)ks.getKey(alias,
+	JKS_PASSWORD);
+	java.security.cert.Certificate[] chain =
+	ks.getCertificateChain(alias);
+	CERT_CHAIN = new X509Certificate[chain.length];
+
+	for(int i = 0; i < chain.length; i++)
+	CERT_CHAIN[i] = (X509Certificate)chain[i];
+	System.out.println("Exporting key entry with alias: " + alias);
+	break;
+	}
+	}
+	if(CERT_CHAIN == null)
+	throw new Exception("Sorry, no key entry found in JKS file:	" + JKS_FILENAME);
+	}
+
+	static void importIntoPKCS12()
+	throws Exception
+	{
+	//Create a PKCS#12 key store.
+	KeyStore ks = KeyStore.getInstance("pkcs12");
+	ks.load(null, null);
+
+	//Import/insert the exported key entry into PKCS#12 key store.
+	ks.setKeyEntry("", PRIVATE_KEY, PKCS12_PASSWORD, CERT_CHAIN);
+
+	//Save key store on disk.
+	FileOutputStream fos = new FileOutputStream(PKCS12_FILENAME);
+	ks.store(fos, PKCS12_PASSWORD);
+	fos.close();
+
+	System.out.println("Import of key entry into PKCS#12 key store succeeded.");
+}

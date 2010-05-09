@@ -1,0 +1,44 @@
+package com.sgnn7.ssl;
+
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+public class CustomTrustManager implements X509TrustManager {
+
+	@Override
+	public void checkClientTrusted(X509Certificate[] chain, String authType)
+			throws CertificateException {
+		for (int j = 0; j < chain.length; j++) {
+			System.out.println("Client certificate information:");
+			System.out.println("  Subject DN: " + chain[j].getSubjectDN());
+			System.out.println("  Issuer DN: " + chain[j].getIssuerDN());
+			System.out
+					.println("  Serial number: " + chain[j].getSerialNumber());
+			System.out.println("");
+		}
+
+	}
+
+	@Override
+	public void checkServerTrusted(X509Certificate[] chain, String authType)
+			throws CertificateException {
+		for (int j = 0; j < chain.length; j++) {
+			System.out.println("Client certificate information:");
+			System.out.println("  Subject DN: " + chain[j].getSubjectDN());
+			System.out.println("  Issuer DN: " + chain[j].getIssuerDN());
+			System.out
+					.println("  Serial number: " + chain[j].getSerialNumber());
+			System.out.println("");
+		}
+
+	}
+
+	@Override
+	public X509Certificate[] getAcceptedIssuers() {
+		return null;
+	}
+
+}

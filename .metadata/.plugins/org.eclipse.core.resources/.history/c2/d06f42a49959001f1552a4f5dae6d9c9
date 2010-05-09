@@ -1,0 +1,58 @@
+package com.sgnn7.server;
+
+import java.util.Vector;
+
+class RequestParser {
+	Vector<String> request = new Vector<String>();
+
+	public RequestParser() {
+	}
+
+	public void addLine(String line) {
+		request.addElement(line);
+	}
+
+	protected boolean isGetRequest() {
+		try {
+			if (request.elementAt(0).startsWith("GET"))
+				return true;
+		} catch (Exception e) {
+		}
+		return false;
+	}
+
+	protected String getFileName() {
+		if (request.isEmpty())
+			return "";
+
+		String requestLine = (String) request.elementAt(0);
+		System.err.println(requestLine);
+		
+		String[] tokenizedString = requestLine.split(" ");
+		System.err.println(tokenizedString);
+		for(String test: tokenizedString){
+			System.err.println(test);
+		}
+		String fileName = tokenizedString[1];
+		try {
+			if (fileName.startsWith("/"))
+				fileName = fileName.substring(1);
+		} catch (StringIndexOutOfBoundsException ex) {
+		}
+		
+		if (fileName.equals(""))
+			fileName = "index.htm";
+		
+		if (fileName.charAt(fileName.length() - 1) == '/')
+			fileName += "index.htm";
+		
+		fileName = fileName.replaceAll("\\.\\.", "");
+		
+		System.err.println(fileName);
+		return fileName;
+	}
+
+	protected void debugRequest() {
+		System.out.println("Request:" + request.elementAt(0));
+	}
+}

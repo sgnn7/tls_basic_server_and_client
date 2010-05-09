@@ -1,0 +1,10 @@
+package com.sgnn7.client;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
+
+	private static class NullHostnameVerifier implements HostnameVerifier {
+	    public boolean verify(String hostname, SSLSession session) {
+	        return true;
+	    }
+	}

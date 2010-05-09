@@ -1,0 +1,65 @@
+package com.sgnn7.server;
+
+import java.io.FileInputStream;
+import java.net.ServerSocket;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+
+import javax.net.ServerSocketFactory;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.TrustManagerFactory;
+
+public class SecureServer extends HttpServer {
+	String serverKeystore = "server.keystore";
+	char[] keystorePassword = "changeit".toCharArray();
+	char[] keyPassword = "changeit".toCharArray();
+
+	String serverTruststore = "server.truststore";
+	char[] truststorePassword = "changeit".toCharArray();
+	
+	boolean requireClientAuthentication;
+
+	public static void main(String args[]) {
+		SecureServer server = new SecureServer();
+		server.run();
+	}
+
+	public SecureServer(String name, String version, int port,
+			boolean requireClientAuthentication) {
+		super(name, version, port);
+		this.requireClientAuthentication = requireClientAuthentication;
+	}
+
+	public SecureServer() {
+		this("SecureServer", "1.0", 443, true);
+	}
+
+	ServerSocket getServerSocket() throws Exception {
+		KeyStore keystore = KeyStore.getInstance("JKS");
+		keystore.load(new FileInputStream(serverKeystore), keystorePassword);
+		KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+		keyManagerFactory.init(keystore, keyPassword);
+
+		for (String protocol: SSLContext.getDefault().getSupportedSSLParameters().getProtocols()){
+			System.out.println("Protocol supported: " + protocol);
+		}
+		
+		SSLContext sslContext = SSLContext.getInstance("TLSv1");
+		
+		KeyStore trustStore = KeyStore.getInstance("JKS");
+		trustStore.load(new FileInputStream(serverTruststore), truststorePassword);
+		TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+		tmf.init(trustStore);
+
+		sslContext.init(keyManagerFactory.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
+		ServerSocketFactory secureSocketFactory = sslContext.getServerSocketFactory();
+
+		SSLServerSocket serverSocket = (SSLServerSocket) secureSocketFactory
+				.createServerSocket(serverPort);
+		serverSocket.setNeedClientAuth(requireClientAuthentication);
+
+		return serverSocket;
+	}
+}

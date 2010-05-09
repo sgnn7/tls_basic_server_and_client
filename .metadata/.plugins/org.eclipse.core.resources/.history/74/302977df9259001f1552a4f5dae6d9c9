@@ -1,0 +1,214 @@
+package com.sgnn7.server;
+
+import java.net.*;
+import java.io.*;
+import java.util.*;
+
+public class HttpServer {
+	String serverName;
+	protected int serverPort;
+
+	public static void main(String args[]) {
+		HttpServer server = new HttpServer("HTTPServer", 80);
+		server.start();
+	}
+
+	public HttpServer(String name, int port) {
+		this.serverName = name;
+		this.serverPort = port;
+	}
+
+	public void displayVersionInfo() {
+		System.out.println(serverName);
+	}
+
+	public void start() {
+		displayVersionInfo();
+		try {
+			ServerSocket server = getServerSocket();
+			int localPort = server.getLocalPort();
+
+			System.out.println(serverName + " is listening on port " + localPort
+					+ ".");
+			do {
+				Socket client = server.accept();
+				(new HTTPServerThread(client)).start();
+			} while (true);
+		} catch (Exception ex) {
+			System.out.println("Unable to listen on " + serverPort + ".");
+			ex.printStackTrace();
+			System.exit(1);
+		}
+	}
+
+	protected ServerSocket getServerSocket() throws Exception {
+		return new ServerSocket(serverPort);
+	}
+}
+
+class HTTPServerThread extends Thread {
+	Socket client;
+
+	public HTTPServerThread(Socket client) {
+		this.client = client;
+	}
+
+	public void run() {
+		try {
+			describeConnection(client);
+
+			BufferedOutputStream outStream = new BufferedOutputStream(client
+					.getOutputStream());
+			HTTPInputStream inStream = new HTTPInputStream(client
+					.getInputStream());
+
+			HTTPRequest request = inStream.getRequest();
+			request.log();
+			
+			if (request.isGetRequest())
+				processGetRequest(request, outStream);
+			System.out.println("Request completed. Closing connection.");
+		} catch (IOException ex) {
+			System.out.println("IOException occurred when processing request.");
+		}
+		try {
+			client.close();
+		} catch (IOException ex) {
+			System.out.println("IOException occurred when closing socket.");
+		}
+	}
+
+	void describeConnection(Socket client) {
+		String destName = client.getInetAddress().getHostName();
+		String destAddr = client.getInetAddress().getHostAddress();
+		int destPort = client.getPort();
+		System.out.println("Accepted connection to " + destName + " ("
+				+ destAddr + ")" + " on port " + destPort + ".");
+	}
+
+	void processGetRequest(HTTPRequest request, BufferedOutputStream outStream)
+			throws IOException {
+		String fileName = request.getFileName();
+		File file = new File("site" + File.separator + fileName);
+		// Give them the requested file
+		if (file.exists())
+			sendFile(outStream, file);
+		else
+			System.out.println("File " + file.getCanonicalPath()
+					+ " does not exist.");
+	}
+
+	void sendFile(BufferedOutputStream out, File file) {
+		try {
+			DataInputStream in = new DataInputStream(new FileInputStream(file));
+			int len = (int) file.length();
+			byte buffer[] = new byte[len];
+			in.readFully(buffer);
+			in.close();
+			out.write("HTTP/1.0 200 OK\r\n".getBytes());
+			out.write(("Content-Length: " + buffer.length + "\r\n").getBytes());
+			out.write("Content-Type: text/html\r\n\r\n".getBytes());
+			out.write(buffer);
+			out.flush();
+			out.close();
+			System.out.println("File sent: " + file.getCanonicalPath());
+			System.out.println("Number of bytes: " + len);
+		} catch (Exception ex) {
+			try {
+				out.write(("HTTP/1.0 400 " + "No can do" + "\r\n").getBytes());
+				out.write("Content-Type: text/html\r\n\r\n".getBytes());
+			} catch (IOException ioe) {
+			}
+			System.out.println("Error retrieving " + file);
+		}
+	}
+}
+
+class HTTPInputStream extends FilterInputStream {
+	public HTTPInputStream(InputStream in) {
+		super(in);
+	}
+
+	public String readLine() throws IOException {
+		StringBuffer result = new StringBuffer();
+		boolean finished = false;
+		boolean cr = false;
+		do {
+			int ch = -1;
+			ch = read();
+			if (ch == -1)
+				return result.toString();
+			result.append((char) ch);
+			if (cr && ch == 10) {
+				result.setLength(result.length() - 2);
+				return result.toString();
+			}
+			if (ch == 13)
+				cr = true;
+			else
+				cr = false;
+		} while (!finished);
+		return result.toString();
+	}
+
+	public HTTPRequest getRequest() throws IOException {
+		HTTPRequest request = new HTTPRequest();
+		String line;
+		do {
+			line = readLine();
+			if (line.length() > 0)
+				request.addLine(line);
+			else
+				break;
+		} while (true);
+		return request;
+	}
+}
+
+class HTTPRequest {
+	Vector<String> lines = new Vector<String>();
+
+	public HTTPRequest() {
+	}
+
+	public void addLine(String line) {
+		lines.addElement(line);
+	}
+
+	boolean isGetRequest() {
+		if (lines.size() > 0) {
+			String firstLine = (String) lines.elementAt(0);
+			if (firstLine.length() > 0)
+				if (firstLine.substring(0, 3).equalsIgnoreCase("GET"))
+					return true;
+		}
+		return false;
+	}
+
+	String getFileName() {
+		if (lines.size() > 0) {
+			String firstLine = (String) lines.elementAt(0);
+			String fileName = firstLine.substring(firstLine.indexOf(" ") + 1);
+			int n = fileName.indexOf(" ");
+			if (n != -1)
+				fileName = fileName.substring(0, n);
+			try {
+				if (fileName.charAt(0) == '/')
+					fileName = fileName.substring(1);
+			} catch (StringIndexOutOfBoundsException ex) {
+			}
+			if (fileName.equals(""))
+				fileName = "index.htm";
+			if (fileName.charAt(fileName.length() - 1) == '/')
+				fileName += "index.htm";
+			return fileName;
+		} else
+			return "";
+	}
+
+	void log() {
+		System.out.println("Received the following request:");
+		for (int i = 0; i < lines.size(); ++i)
+			System.out.println((String) lines.elementAt(i));
+	}
+}

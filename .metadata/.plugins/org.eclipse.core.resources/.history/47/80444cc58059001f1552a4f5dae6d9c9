@@ -1,0 +1,5 @@
+package com.sgnn7.ssl;
+
+public class CustomTrustManager {
+
+}
